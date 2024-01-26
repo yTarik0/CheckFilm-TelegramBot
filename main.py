@@ -3,8 +3,9 @@
 import requests  # ---> for requests of the page
 import re  # --> for RegEx
 import stat, time, os  # ---> for Time, checking file - age
+import urllib.parse
 
-# für Seite: https://s.to (Serien..)
+# für Serien: https://s.to (Seite für Serien..)
 
 # film_katalog = input("Gib ein katalog an (A-Z): ")
 # streaming_url = f"https://s.to/katalog/{film_katalog}"
@@ -13,10 +14,6 @@ import stat, time, os  # ---> for Time, checking file - age
 # User nach Input fragen!
 print("Beachte den Film Namen richtig einzugeben!")
 film_name = input("Gib den Filmnamen an: ")
-
-
-# Grund Informationen Definieren
-pathname = f"/home/tarik/WorkSpace/Visual/Programms/CheckFilm-TelegramBot/movie-search/Film-Suche-{film_name}.txt"
 
 
 # LeerZeichen mit "-" replacen damit keine Suchfehler entstehen
@@ -45,6 +42,9 @@ url_list = [
     "https://heymovies.to/filter?keyword=",
     "https://fmoviesz.to/filter?keyword=",
     "https://ww.yesmovies.ag/search.html?q=",
+    "https://primeflix-web.vercel.app/search/",
+    "https://themoviearchive.site/search?query=",
+    "https://watch.streamflix.one/movie?search="
 ]
 
 list_2 = [
@@ -56,13 +56,15 @@ list_2 = [
     "https://hurawatch.bz/filter?keyword=",
     "https://fmoviesz.to/filter?keyword=",
     "https://ww.yesmovies.ag/search.html?q=",
+    "https://themoviearchive.site/search?query=",
+    "https://watch.streamflix.one/movie?search="
 ]
 
 # Funktionen Definieren:
 
 
 # Download Funktion
-def download(streaming_url):
+def download(pathname, streaming_url):
     response = requests.get(streaming_url)
     if response.status_code != 200:
         # Debug Control
@@ -75,6 +77,9 @@ def download(streaming_url):
 
 # checkCache Funktion
 def checkCache(streaming_url):
+    # Streaming-URL Parsen ohne "https://"
+    site = urllib.parse.urlsplit(streaming_url).hostname
+    pathname = f"movie-search/{site}-{film_name}.txt"
     # Check if File exists
     if os.path.exists(pathname) == True:
         #   if exsits check age
@@ -83,7 +88,7 @@ def checkCache(streaming_url):
         ) > 3600:  # if file.txt older than 1 Hour (3600s) than:
             # Debug Control
             # print("File too old redownloading")
-            content = download(streaming_url)
+            content = download(pathname, streaming_url)
 
         #   if everything ok --> use it
         else:
@@ -96,7 +101,7 @@ def checkCache(streaming_url):
     else:
         # Debug Control
         # print("Downloading new!")
-        content = download(streaming_url)
+        content = download(pathname ,streaming_url)
 
     return content
 
@@ -130,14 +135,16 @@ def main():
                 f'Der Film exsitiert  nicht auf der Seite "{streaming_url}" oder wurde nicht korrekt angegeben'
             )
 
-        # If Web Service doesnt have the Movie delete File
-        # os.remove(f"/home/tarik/WorkSpace/Visual/Programms/telegrambot/movie-search/Film-Suche-{film_name}.txt")
+       
         else:
             print(
                 f'Der Film "{film_name}" ist auf der Setie "{streaming_url}" verfügbar'
             )
 
         checkCache(streaming_url)
+        # If Web Service doesnt have the Movie delete File
+        site = urllib.parse.urlsplit(streaming_url).hostname
+        os.remove(f"movie-search/{site}-{film_name}.txt")
 
 
 main()
