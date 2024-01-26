@@ -16,7 +16,7 @@ film_name = input("Gib den Filmnamen an: ")
 
 
 # Grund Informationen Definieren
-pathname = f"/home/tarik/WorkSpace/Visual/Programms/CheckFilm-TelegramBot/movie-search/Film-Suche-{film_name}.txt"
+pathname = f"Your-Workspace/Folder-For-Movie-Caches/Film-Suche-{film_name}.txt"
 
 
 # LeerZeichen mit "-" replacen damit keine Suchfehler entstehen
