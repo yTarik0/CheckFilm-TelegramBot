@@ -3,18 +3,18 @@
 import requests  # ---> for requests of the page
 import re  # --> for RegEx
 import stat, time, os  # ---> for Time, checking file - age
-import urllib.parse
+import urllib.parse    # ---> for parsing url
 
-# für Serien: https://s.to (Seite für Serien..)
+# -----------------------------------------------------------
+# Für Serien: https://s.to (Seite für Serien..)
 
 # film_katalog = input("Gib ein katalog an (A-Z): ")
 # streaming_url = f"https://s.to/katalog/{film_katalog}"
-
+# -----------------------------------------------------------
 
 # User nach Input fragen!
 print("Beachte den Film Namen richtig einzugeben!")
 film_name = input("Gib den Filmnamen an: ")
-
 
 # LeerZeichen mit "-" replacen damit keine Suchfehler entstehen
 film_name_url = film_name.replace(" ", "-").replace("&", "and")
@@ -61,7 +61,6 @@ list_2 = [
 ]
 
 # Funktionen Definieren:
-
 
 # Download Funktion
 def download(pathname, streaming_url):
@@ -135,7 +134,6 @@ def main():
                 f'Der Film exsitiert  nicht auf der Seite "{streaming_url}" oder wurde nicht korrekt angegeben'
             )
 
-       
         else:
             print(
                 f'Der Film "{film_name}" ist auf der Setie "{streaming_url}" verfügbar'
@@ -145,6 +143,5 @@ def main():
         # If Web Service doesnt have the Movie delete File
         site = urllib.parse.urlsplit(streaming_url).hostname
         os.remove(f"movie-search/{site}-{film_name}.txt")
-
 
 main()
