@@ -1,3 +1,5 @@
+# Test File; Date 2024-01-35
+
 import requests
 import re
 import stat, time ,os
@@ -14,10 +16,13 @@ film_name = input("Gib den Filmnamen an: ")
 
 # LeerZeichen mit "-" replacen damit keine Suchfehler entstehen
 film_name_url = film_name.replace(" ","-").replace("&", "and")
+film_name_url2 = film_name.replace(" ","%20")
+search_film_name = ""
 
 # Grund Informationen Definieren
-streaming_url = f"https://dopebox.to/search/{film_name_url.lower()}"
-pathname =f"/home/tarik/WorkSpace/Visual/Programms/telegrambot/Dopebox.to/Film-Suche-{film_name}.txt"
+streaming_url = f"https://movies2watch.tv/search/{film_name_url.lower()}"
+print(streaming_url)
+pathname =f"/home/tarik/WorkSpace/Visual/Programms/telegrambot/test-movie/Film-Suche-{film_name}.txt"
 
 # Damit "&" in der RegEx suche erkannt wird!
 if "&" in film_name:
@@ -54,8 +59,11 @@ else:
     content = download()
 
 # Film-Suche mit RegEx (simple Lösung)
-x = re.search(f"title=\"{search_film_name.lower()}", content.lower())
-if x == None:
+x = re.search(f"title=\"{film_name.lower()}", content.lower())
+y = re.search(f"alt=\"{film_name.lower()}", content.lower())
+print("x: "+x)
+print("y: "+y)
+if x and y == None:
     print("Film exsitiert nicht oder wurde nicht korrekt angegeben")
 else: 
     print(f'Der Film "{film_name}" ist auf der Setie "{streaming_url}" verfügbar')
