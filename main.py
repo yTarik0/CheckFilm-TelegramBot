@@ -136,7 +136,7 @@ def main():
 
         else:
             print(
-                f'Der Film "{film_name}" ist auf der Setie "{streaming_url}" verfügbar'
+                f'Der Film "{film_name}" ist auf der Seite "{streaming_url}" verfügbar'
             )
 
         checkCache(streaming_url)
