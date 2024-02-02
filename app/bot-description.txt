@@ -1,0 +1,13 @@
+CheckMovie Bot: 
+Find out where to stream your favorite movies with a quick search! 🎬✨
+
+Features:
+
+🕵️‍♂️Search anonymously across various platforms for movie availability.
+🎥Discover new titles to watch.
+🔄Get regular updates on streaming options.
+
+How to Use:
+
+Type /checkmovie followed by the movie name to start your search. For example: /checkmovie Inception.
+Never wonder where to watch your next movie again!
