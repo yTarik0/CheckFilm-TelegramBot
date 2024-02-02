@@ -1,6 +1,6 @@
 # CheckMovie-TelegramBot
 - Author: yTarik0
-- Version: @v.10
+- Version: @v.13
 - checks if a move is on a streaming - webservice
 - can also used to check series
 - Change the following code if you use Windows, so that there no encoding errors
