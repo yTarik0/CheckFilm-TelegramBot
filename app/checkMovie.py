@@ -117,10 +117,11 @@ def main(film_name):
             site = urllib.parse.urlsplit(streaming_url).hostname
             os.remove(f"C:/Users/tarik/OneDrive/Desktop/Home/Users/Tarik/Coding/Workspace/CheckFilm-TelegramBot-main/app/movie-search/{site}-{film_name}.txt")
             # If you want to print out Web-Services that dont support the movie
-            #ergebnisse.append(f'Movie <b>"{film_name.upper()}"</b> on: "{streaming_url}" ❌not avalible or check input❌\n')
+            #ergebnisse.append(f'Movie <b>{film_name.upper()}</b> is not available on: <a href="{streaming_url}">{site}</a> ❌\n')
         else:
+            site = urllib.parse.urlsplit(streaming_url).hostname
             checkCache(streaming_url, film_name)
-            ergebnisse.append(f'Movie <b>"{film_name.upper()}"</b> on: "{streaming_url}"\n✅available✅\n')
+            ergebnisse.append(f'Movie <b>{film_name.upper()}</b> is available on: <a href="{streaming_url}">{site}</a> ✅\n')
 
     ergebnis_string = '\n'.join(ergebnisse)
     return ergebnis_string
