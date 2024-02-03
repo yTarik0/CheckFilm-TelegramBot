@@ -10,37 +10,63 @@ import time
 
 load_dotenv()
 
-commandlist = ["/commandlist", "/checkmovie","/usage",]
-
+# Api-Key Definieren von .env file
 API_KEY = os.getenv('API_KEY')
 bot = telebot.TeleBot(API_KEY)
-bot = telebot.TeleBot(API_KEY)
+
+# Bot Starting..
 print("🛫 Telegram-Bot: CheckMovie is running...🛫")
 
+# commandliste setzten ---> auto response
+commandlist = ["/commandlist", "/checkmovie","/usage","/help"]
+
+# Ein Dictionary, um den Zustand jedes Benutzers zu speichern
+user_expected_input = {}
+
+
+# Check Movie Search Commannd --> funcitons
+
+
+# function checkMovie
+def checkMovie(message):
+    user_expected_input[message.chat.id] = True
+    bot.reply_to(message, "Please type a movie name")
+
+# message handler --> respond like telegrambot
+@bot.message_handler(func=lambda message: message.chat.id in user_expected_input)
+def handle_movie_name(message):
+    if user_expected_input.pop(message.chat.id, None):
+        film_name = message.text
+        # Hier rufen Sie Ihre Funktion auf, um die Verfügbarkeit des Films zu überprüfen
+        # Angenommen, `main` ist Ihre Funktion, die die Verfügbarkeit prüft und einen String zurückgibt
+        result = main(film_name)
+
+        markup = InlineKeyboardMarkup()
+        search_button = InlineKeyboardButton("📊 Back to Menu", callback_data='menu_button')
+        markup.add(search_button)
+
+        # Antwort mit dem Ergebnis und einem Inline-Keyboard
+        #bot.reply_to(message, f"Checking where Movie - <b>{film_name.upper()}</b> available", parse_mode='HTML')
+        bot.reply_to(message, result, reply_markup=markup, parse_mode='HTML')
+
+
+# checkMovie Command
+@bot.message_handler(commands=["checkmovie"])
+def command_handler(message):
+    checkMovie(message)
+
+
 # Commandlist Command
-@bot.message_handler(commands=["commandlist"])
+@bot.message_handler(commands=["commandlist", "help"])
 def get_commmandlist(message):
     commands_str = "\n".join(commandlist)
     bot.reply_to(message, f"<b>Available Commands</b>:\n{commands_str}",  parse_mode='HTML')
 
-# Check Movie Command
-@bot.message_handler(commands=["checkmovie"])
-def checkMovie(message):
-    parts = message.text.split()
-    if len(parts) > 1:
-        film_name = ' '.join(parts[1:])
-        bot.reply_to(message, f"Checking where Movie - <b>{film_name.upper()}</b> available", parse_mode='HTML')
-        
-        result = main(film_name)
-        time.sleep(5)
-        bot.reply_to(message,result, parse_mode='HTML')
-    else:
-        bot.reply_to(message, "Please enter a Movie-Name after the Command")
 
 # Usage Command
 @bot.message_handler(commands=["usage"])
 def usage(message):
-    bot.reply_to(message, "Usage: Use /checkmovie [movie-name] to search for a movie's availability.\nPlease make sure you make no mistake when typing the movie name")
+    bot.reply_to(message, "Usage: Type /checkmovie and after the Bot-Response the movie name to start your search\nPlease make sure you make no mistake when typing the movie name")
 
 
 # Auto Response if text-message is not a Command
@@ -89,8 +115,8 @@ def handle_query(call):
        bot.answer_callback_query(call.id)
 
     if call.data == "support_button":
-        bot.answer_callback_query(call.id, "CheckMovieSOL")
-        bot.send_message(call.message.chat.id, "CheckMovieSOL")
+        bot.answer_callback_query(call.id, "Contact CheckMovieSOL on Twitter")
+        bot.send_message(call.message.chat.id, "If there are any problems let us know\n📧 Contact: https://twitter.com/CheckMovieSOL")
 
 # Am Ende des Codes damit alle Befehle gesynced sind
 bot.polling(none_stop=True) # none_stop=True --> wenn fehler kommt damit nicht stopt
