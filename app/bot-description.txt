@@ -9,5 +9,5 @@ Features:
 
 How to Use:
 
-Type /checkmovie followed by the movie name to start your search. For example: /checkmovie Inception.
+Type /checkmovie and after the Bot-Response the movie name to start your search. For example: /checkmovie and after the Bot-Response the movie name.
 Never wonder where to watch your next movie again!
