@@ -56,6 +56,8 @@ def download(pathname, streaming_url):
 def checkCache(streaming_url, film_name):
     # Streaming-URL Parsen ohne "https://"
     site = urllib.parse.urlsplit(streaming_url).hostname
+
+    #pathname = (f"YOUR-PATH/movie-search/{site}-{film_name}.txt")
     pathname = f"C:/Users/tarik/OneDrive/Desktop/Home/Users/Tarik/Coding/Workspace/CheckFilm-TelegramBot-main/app/movie-search/{site}-{film_name}.txt"
     # Check if File exists
     if os.path.exists(pathname) == True:
@@ -113,9 +115,13 @@ def main(film_name):
         )
         if x is None and y is None:  # or use --> if x and y == None:
             checkCache(streaming_url, film_name)
+
             # If Web Service doesnt have the Movie delete Film
             site = urllib.parse.urlsplit(streaming_url).hostname
+            
+            # os.remove (f"YOUR-PATH/movie-search/{site}-{film_name}.txt")
             os.remove(f"C:/Users/tarik/OneDrive/Desktop/Home/Users/Tarik/Coding/Workspace/CheckFilm-TelegramBot-main/app/movie-search/{site}-{film_name}.txt")
+            
             # If you want to print out Web-Services that dont support the movie
             #ergebnisse.append(f'Movie <b>{film_name.upper()}</b> is not available on: <a href="{streaming_url}">{site}</a> ❌\n')
         else:
