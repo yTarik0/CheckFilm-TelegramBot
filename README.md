@@ -1,7 +1,7 @@
 # CheckMovie-TelegramBot
 - Find out where to stream your favorite movies with a quick search! 🎬✨
 - Author: yTarik0
-- Version: @v.1
+- Version: @v.16
 
 ## Features
 
