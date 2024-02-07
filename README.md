@@ -3,13 +3,13 @@
 - Author: yTarik0
 - Version: @v.1
 
-##Features:
+## Features:
 
 -🕵️‍♂️Search anonymously across various platforms for movie availability.
 - 🎥Discover new titles to watch.
 - 🔄Get regular updates on streaming options.
 
-##How to Use:
+## How to Use:
 
 Type /checkmovie and after the Bot-Response the movie name to start your search. For example: /checkmovie and after the Bot-Response the movie name.
 Never wonder where to watch your next movie again!
