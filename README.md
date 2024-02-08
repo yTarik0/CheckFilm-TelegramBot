@@ -1,7 +1,6 @@
 # CheckMovie-TelegramBot
 - Find out where to stream your favorite movies with a quick search! 🎬✨
-- Author: yTarik0
-- Version: @v.16
+- Check if Movie available via Telegram
 
 ## Features
 
@@ -16,3 +15,7 @@ Never wonder where to watch your next movie again!
 
 ## TelegramBot-Chat Link
 - <b>Chat-Link:</b> https://t.me/MovieCheck_Bot
+
+## Credits
+- Author: yTarik0
+- Version: @v.16
