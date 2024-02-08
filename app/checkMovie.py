@@ -95,6 +95,8 @@ def main(film_name):
     # LeerZeichen in HTML - Link formatieren zu "%20"  damit keine Suchfehler entstehen
     film_name_url2 = film_name.replace(" ", "%20")
 
+    found_movie = False
+
     for streaming_url in url_list:
         if streaming_url in list_2:
             streaming_url = f"{streaming_url}{film_name_url2 }"
@@ -119,15 +121,22 @@ def main(film_name):
             # If Web Service doesnt have the Movie delete Film
             site = urllib.parse.urlsplit(streaming_url).hostname
             
+
             # os.remove (f"YOUR-PATH/movie-search/{site}-{film_name}.txt")
             os.remove(f"C:/Users/tarik/OneDrive/Desktop/Home/Users/Tarik/Coding/Workspace/CheckFilm-TelegramBot-main/app/movie-search/{site}-{film_name}.txt")
             
             # If you want to print out Web-Services that dont support the movie
             #ergebnisse.append(f'Movie <b>{film_name.upper()}</b> is not available on: <a href="{streaming_url}">{site}</a> ❌\n')
+        
+        # if movied found with regex then:
         else:
+            found_movie = True
             site = urllib.parse.urlsplit(streaming_url).hostname
             checkCache(streaming_url, film_name)
             ergebnisse.append(f'Movie <b>{film_name.upper()}</b> is available on: <a href="{streaming_url}">{site}</a> ✅\n')
+            
+    if not found_movie:
+        ergebnisse.append(f'Movie <b>{film_name.upper()}</b> is unavailable or there was an error in your input  ❌\n')
 
     ergebnis_string = '\n'.join(ergebnisse)
     return ergebnis_string
