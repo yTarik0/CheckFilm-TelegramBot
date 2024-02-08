@@ -15,4 +15,4 @@ Type /checkmovie and after the Bot-Response the movie name to start your search.
 Never wonder where to watch your next movie again!
 
 ## TelegramBot-Chat Link
-- chat: https://t.me/MovieCheck_Bot
+- <b>Chat-Link:</b> https://t.me/MovieCheck_Bot
