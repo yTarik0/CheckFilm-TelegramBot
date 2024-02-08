@@ -18,7 +18,7 @@ bot = telebot.TeleBot(API_KEY)
 print("🛫 Telegram-Bot: CheckMovie is running...🛫")
 
 # commandliste setzten ---> auto response
-commandlist = ["/commandlist", "/checkmovie","/usage","/help"]
+commandlist = ["/checkmovie","/usage","/help"]
 
 # Ein Dictionary, um den Zustand jedes Benutzers zu speichern
 user_expected_input = {}
@@ -51,7 +51,7 @@ def handle_movie_name(message):
         search_button = InlineKeyboardButton("📊 Back to Menu", callback_data='menu_button')
         markup.add(search_button)
 
-        reply = bot.reply_to(message, result, reply_markup=markup, parse_mode='HTML')
+        reply = bot.reply_to(message, result, reply_markup=markup, parse_mode='HTML', disable_web_page_preview=True)
         add_message_id(reply.message_id)
 
 # checkMovie Command
@@ -77,7 +77,7 @@ def usage(message):
 # Auto Response if text-message is not a Command
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def echo_all( message):
-    local_command_list = ["/hello", "/checkmovie", "/usage", "/commandlist"]
+    local_command_list = ["/help", "/checkmovie", "/usage"]
     is_command = any(message.text.startswith(command) for command in local_command_list)
     if not is_command:
 
