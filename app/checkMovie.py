@@ -7,10 +7,9 @@ import re  # --> for RegEx
 import stat, time, os  # ---> for Time, checking file - age
 import urllib.parse    # ---> for parsing url
 
-# WebServices to Check if Movie avaliable (10 Websites+)
+# WebServices to Check if Movie avaliable 
 url_list = [
     "https://zoechip.cc/search/",
-    "https://dopebox.to/search/",
     "https://ww2.123moviesfree.net/search/?q=",
     "https://movieroom.xyz/?s=",
     "https://netfilm.app/search?keyword=",
@@ -44,8 +43,7 @@ list_2 = [
 def download(pathname, streaming_url):
     response = requests.get(streaming_url)
     if response.status_code != 200:
-        # Debug Control
-        # print("error")
+        #print("Website not Reachable --> HTTP Status Code not 200")
         exit
     with open(pathname, "w", encoding='utf-8') as data:
         data.write(response.text)
@@ -56,8 +54,6 @@ def download(pathname, streaming_url):
 def checkCache(streaming_url, film_name):
     # Streaming-URL Parsen ohne "https://"
     site = urllib.parse.urlsplit(streaming_url).hostname
-
-    #pathname = (f"YOUR-PATH/movie-search/{site}-{film_name}.txt")
     pathname = f"C:/Users/tarik/OneDrive/Desktop/Home/Users/Tarik/Coding/Workspace/CheckFilm-TelegramBot-main/app/movie-search/{site}-{film_name}.txt"
     # Check if File exists
     if os.path.exists(pathname) == True:
@@ -65,23 +61,16 @@ def checkCache(streaming_url, film_name):
         if (
             time.time() - os.stat(pathname)[stat.ST_MTIME]
         ) > 3600:  # if file.txt older than 1 Hour (3600s) than:
-            # Debug Control
-            # print("File too old redownloading")
             content = download(pathname, streaming_url)
 
         #   if everything ok --> use it
         else:
            with open(pathname, "r", encoding='utf-8', errors='replace') as data:
-                #  Debug Control
-                # print("File exsits, using it!")
                 content = data.read()
 
     # if not downloaded  --> download new
     else:
-        # Debug Control
-        # print("Downloading new!")
         content = download(pathname ,streaming_url)
-
     return content
 
 
@@ -109,20 +98,22 @@ def main(film_name):
             search_film_name = film_name.replace("&", "&amp;")
 
         # Film-Suche mit RegEx (simple Lösung)
+        
+        # Such Methode 1
         x = re.search(
             f'title="{search_film_name.lower()}', checkCache(streaming_url, film_name).lower()
         )
+        # Such Methode 2
         y = re.search(
             f'alt="{search_film_name.lower()}', checkCache(streaming_url, film_name).lower()
         )
+
+        # wenn regex suche nix gefunden hat dann:
         if x is None and y is None:  # or use --> if x and y == None:
             checkCache(streaming_url, film_name)
+            site = urllib.parse.urlsplit(streaming_url).hostname
 
             # If Web Service doesnt have the Movie delete Film
-            site = urllib.parse.urlsplit(streaming_url).hostname
-            
-
-            # os.remove (f"YOUR-PATH/movie-search/{site}-{film_name}.txt")
             os.remove(f"C:/Users/tarik/OneDrive/Desktop/Home/Users/Tarik/Coding/Workspace/CheckFilm-TelegramBot-main/app/movie-search/{site}-{film_name}.txt")
             
             # If you want to print out Web-Services that dont support the movie
