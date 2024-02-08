@@ -1,6 +1,6 @@
 # CheckMovie-TelegramBot
 - Find out where to stream your favorite movies with a quick search! 🎬✨
-- Check if Movie available via Telegram
+- Check if Movie available via Telegram 💬🎞️
 
 ## Features
 
