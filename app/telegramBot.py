@@ -14,8 +14,7 @@ load_dotenv()
 API_KEY = os.getenv('API_KEY')
 bot = telebot.TeleBot(API_KEY)
 
-# Bot Starting..
-print("🛫 Telegram-Bot: CheckMovie is running...🛫")
+
 
 # commandliste setzten ---> auto response
 commandlist = ["/checkmovie","/help","/send_logo", "/menu"]
@@ -80,11 +79,12 @@ def handle_movie_name(message):
 
     if user_expected_input.pop(message.chat.id, None):
         # Print die Suche aus
-        print(f'🔎 Telegram-User: "{usrname}" genannt "{usr_nickname}" sucht nach dem Film "{film_name}", Zeitpunkt: {time.strftime("%d.%m.%Y %H:%M:%S")} 🔎\n')
+        print(f'🔎 Telegram-User: "{usrname}" genannt "{usr_nickname}" sucht nach dem Film "{film_name}", Zeitpunkt: {time.strftime("%d.%m.%Y %H:%M:%S")} 🔎')
     
         # Schreibe die Suche der vom User in die Log File
         with open(logs_file, "a+", encoding='utf-8') as data:
-            data.write(f'Telegram-User: "{usrname}" genannt "{usr_nickname}" sucht nach dem Film "{film_name}", Zeitpunkt: {time.strftime("%d.%m.%Y %H:%M:%S")} \n')
+            data.write(f'Telegram-User: "{usrname}" genannt "{usr_nickname}" sucht nach dem Film "{film_name}", Zeitpunkt: {time.strftime("%d.%m.%Y %H:%M:%S")}\n')
+
 
         result = main(film_name)
         markup = InlineKeyboardMarkup()
@@ -168,5 +168,4 @@ def handle_query(call):
     if call.data == "menu_button":
         echo_all(call.message)
 
-# Am Ende des Codes damit alle Befehle gesynced sind
-bot.polling(none_stop=True) # none_stop=True --> wenn fehler kommt damit nicht stopt
+ 
