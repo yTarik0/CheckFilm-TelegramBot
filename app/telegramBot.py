@@ -8,13 +8,12 @@ from dotenv import load_dotenv
 from checkMovie import main
 import time
 
+
 load_dotenv()
 
 # Api-Key Definieren von .env file
 API_KEY = os.getenv('API_KEY')
 bot = telebot.TeleBot(API_KEY)
-
-
 
 # commandliste setzten ---> auto response
 commandlist = ["/checkmovie","/help","/send_logo", "/menu"]
@@ -53,7 +52,7 @@ def menu(message):
         user_name = f'<a href="tg://user?id={message.from_user.id}">{user_first_name}</a>'
             
         # Nachricht mit Inline-Keyboard senden
-        reply = bot.reply_to(message, f"<b>Hello {user_name}</b> 👋,\nPlease run one of the <b>Commands</b> by clicking on the buttons or by typing <b>/commandlist</b> in the chat\nto get a <b>list of all commands</b>", reply_markup=markup, parse_mode='HTML')
+        reply = bot.reply_to(message, f"<b>Hello {user_name}</b> 👋,\nPlease do one of the Actions by <b>clicking on the Buttons</b> or by typing <b>/help</b> in the chat", reply_markup=markup, parse_mode='HTML')
         add_message_id(reply.message_id)
 
         
@@ -78,12 +77,12 @@ def handle_movie_name(message):
 
 
     if user_expected_input.pop(message.chat.id, None):
-        # Print die Suche aus
-        print(f'🔎 Telegram-User: "{usrname}" genannt "{usr_nickname}" sucht nach dem Film "{film_name}", Zeitpunkt: {time.strftime("%d.%m.%Y %H:%M:%S")} 🔎')
+        # Print User Search
+        print(f'🔎 Telegram-User: "{usrname}" called "{usr_nickname}" looked for the Movie "{film_name}", At Time: {time.strftime("%d.%m.%Y %H:%M:%S")} 🔎')
     
-        # Schreibe die Suche der vom User in die Log File
+        # # Save Data in Logs
         with open(logs_file, "a+", encoding='utf-8') as data:
-            data.write(f'Telegram-User: "{usrname}" genannt "{usr_nickname}" sucht nach dem Film "{film_name}", Zeitpunkt: {time.strftime("%d.%m.%Y %H:%M:%S")}\n')
+            data.write(f'Telegram-User: "{usrname}" called "{usr_nickname}" looked for the Movie "{film_name}", At Time: {time.strftime("%d.%m.%Y %H:%M:%S")}\n')
 
 
         result = main(film_name)
@@ -113,7 +112,7 @@ def send_menu(message):
 # Test Command ---> send picture in chat
 @bot.message_handler(commands=["send_logo"])
 def get_logo(message):
-    bot.send_photo(chat_id=message.chat.id, photo=open('app/bot-logo.jpg', 'rb'), caption='<b>Thats the CheckMovie-Bot Logo</b>', parse_mode='HTML')
+    bot.send_photo(chat_id=message.chat.id, photo=open('app/bot-data/bot-logo.jpg', 'rb'), caption='<b>Thats the CheckMovie-Bot Logo</b>', parse_mode='HTML')
 
 # Usage Command
 @bot.message_handler(commands=["help"])
@@ -130,30 +129,56 @@ def echo_all( message):
         menu(message)
 
        
-
 # Button-Callbacks --> if button pressed:
 @bot.callback_query_handler(func=lambda call: True)
 def handle_query(call):
+
+    # Define Data ---> for logs
+    usrname = call.from_user.username
+    usr_nickname = call.from_user.first_name
+    logs_file = "C:/Users/tarik/OneDrive/Desktop/Home/Users/Tarik/Coding/Workspace/CheckFilm-TelegramBot-main/app/logs/button_logs.txt"
+
     if call.data == "usage_button":
+        # Save Data in Logs
+        with open(logs_file, "a+", encoding='utf-8') as data:
+            data.write(f'Telegram-User: "{usrname}" called "{usr_nickname}" pressed the Usage-Button, At Time: {time.strftime("%d.%m.%Y %H:%M:%S")}\n')
+
         # Benachrichtigung Oben Response Pop-Up
         bot.answer_callback_query(call.id, "Usage: Use /checkmovie [movie-name] to search for a movie's availability.")
         reply = bot.send_message(call.message.chat.id, "Usage: Use /checkmovie [movie-name] to search for a movie's availability.\nPlease make sure you make no mistakes when typing the movie name")
         add_message_id(reply.message_id)
 
     if call.data == "search_button":
+       # Save Data in Logs
+       with open(logs_file, "a+", encoding='utf-8') as data:
+            data.write(f'Telegram-User: "{usrname}" called "{usr_nickname}" pressed the Search-Button, At Time: {time.strftime("%d.%m.%Y %H:%M:%S")}\n')
+
        bot.answer_callback_query(call.id,"Type a Movie Name in the Chat")
        checkMovie(call.message)
 
     if call.data == "search_again":
+        # Save Data in Logs
+        with open(logs_file, "a+", encoding='utf-8') as data:
+            data.write(f'Telegram-User: "{usrname}" called "{usr_nickname}" pressed the Search-Button, At Time: {time.strftime("%d.%m.%Y %H:%M:%S")}\n')
+
+
         bot.answer_callback_query(call.id,"Type a Movie Name in the Chat")
         checkMovie(call.message)
        
     if call.data == "support_button":
+        # Save Data in Logs
+        with open(logs_file, "a+", encoding='utf-8') as data:
+            data.write(f'Telegram-User: "{usrname}" called "{usr_nickname}" pressed the Support-Button, At Time: {time.strftime("%d.%m.%Y %H:%M:%S")}\n')
+
         bot.answer_callback_query(call.id, "Contact CheckMovieSOL on Twitter")
         reply = bot.send_message(call.message.chat.id, "If there are any problems let us know\n📧 Contact: https://twitter.com/CheckMovieSOL")
         add_message_id(reply.message_id)
 
     if call.data == "clear_button":
+        # Save Data in Logs
+        with open(logs_file, "a+", encoding='utf-8') as data:
+            data.write(f'Telegram-User: "{usrname}" called "{usr_nickname}" pressed the Clear-Button, At Time: {time.strftime("%d.%m.%Y %H:%M:%S")}\n')
+
         bot.answer_callback_query(call.id, "Chat successfully cleared!")
         for message_id in message_ids:
             try:
@@ -166,6 +191,9 @@ def handle_query(call):
         message_ids.clear()
 
     if call.data == "menu_button":
+        # Save Data in Logs
+        with open(logs_file, "a+", encoding='utf-8') as data:
+            data.write(f'Telegram-User: "{usrname}" called "{usr_nickname}" pressed the Data-Button, At Time: {time.strftime("%d.%m.%Y %H:%M:%S")}\n')
         echo_all(call.message)
 
  
