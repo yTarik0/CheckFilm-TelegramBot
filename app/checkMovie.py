@@ -124,6 +124,7 @@ def main(film_name):
             found_movie = True
             site = urllib.parse.urlsplit(streaming_url).hostname
             checkCache(streaming_url, film_name)
+            os.remove(f"C:/Users/tarik/OneDrive/Desktop/Home/Users/Tarik/Coding/Workspace/CheckFilm-TelegramBot-main/app/movie-search/{site}-{film_name}.txt")
             ergebnisse.append(f'Movie <b>{film_name.upper()}</b> is available on: <a href="{streaming_url}">{site}</a> ✅\n')
             
     if not found_movie:
@@ -131,4 +132,3 @@ def main(film_name):
 
     ergebnis_string = '\n'.join(ergebnisse)
     return ergebnis_string
-
