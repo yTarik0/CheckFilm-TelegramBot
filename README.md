@@ -7,6 +7,7 @@
 - 🕵️‍♂️Search anonymously across various platforms for movie availability.
 - 🎥Discover new titles to watch.
 - 🔄Get regular updates on streaming options.
+- 🌐Telegrambot is completely Open Source
 
 ## How to Use
 
