@@ -6,6 +6,7 @@ import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from dotenv import load_dotenv
 from checkMovie import main
+import time
 
 load_dotenv()
 
@@ -17,7 +18,7 @@ bot = telebot.TeleBot(API_KEY)
 print("🛫 Telegram-Bot: CheckMovie is running...🛫")
 
 # commandliste setzten ---> auto response
-commandlist = ["/checkmovie","/usage","/help","/send_logo", "/menu"]
+commandlist = ["/checkmovie","/help","/send_logo", "/menu"]
 
 # Ein Dictionary, um den Zustand jedes Benutzers zu speichern
 user_expected_input = {}
@@ -50,13 +51,13 @@ def menu(message):
 
         # User Pingen!
         user_first_name = message.from_user.first_name
-        mention = f'<a href="tg://user?id={message.from_user.id}">{user_first_name}</a>'
+        user_name = f'<a href="tg://user?id={message.from_user.id}">{user_first_name}</a>'
             
         # Nachricht mit Inline-Keyboard senden
-        reply = bot.reply_to(message, f"<b>Hello {mention}</b> 👋,\nPlease run one of the <b>Commands</b> by clicking on the buttons or by typing <b>/commandlist</b> in the chat\nto get a <b>list of all commands</b>", reply_markup=markup, parse_mode='HTML')
+        reply = bot.reply_to(message, f"<b>Hello {user_name}</b> 👋,\nPlease run one of the <b>Commands</b> by clicking on the buttons or by typing <b>/commandlist</b> in the chat\nto get a <b>list of all commands</b>", reply_markup=markup, parse_mode='HTML')
         add_message_id(reply.message_id)
 
-
+        
 # Check-Movie Commannd --> funcitons:
 
 # function checkMovie
@@ -65,13 +66,27 @@ def checkMovie(message):
     reply = bot.reply_to(message, "Please type a movie name")
     add_message_id(reply.message_id)
 
+
 # function message handler --> respond like telegrambot
 @bot.message_handler(func=lambda message: message.chat.id in user_expected_input)
 def handle_movie_name(message):
-    if user_expected_input.pop(message.chat.id, None):
-        film_name = message.text
-        result = main(film_name)
+   
+    # Define Variablen für --> Movie Search Logs
+    film_name = message.text
+    usrname = message.from_user.username
+    usr_nickname = message.from_user.first_name
+    logs_file = "C:/Users/tarik/OneDrive/Desktop/Home/Users/Tarik/Coding/Workspace/CheckFilm-TelegramBot-main/app/logs/user_Search_logs.txt"
 
+
+    if user_expected_input.pop(message.chat.id, None):
+        # Print die Suche aus
+        print(f'🔎 Telegram-User: "{usrname}" genannt "{usr_nickname}" sucht nach dem Film "{film_name}", Zeitpunkt: {time.strftime("%d.%m.%Y %H:%M:%S")} 🔎\n')
+    
+        # Schreibe die Suche der vom User in die Log File
+        with open(logs_file, "a+", encoding='utf-8') as data:
+            data.write(f'Telegram-User: "{usrname}" genannt "{usr_nickname}" sucht nach dem Film "{film_name}", Zeitpunkt: {time.strftime("%d.%m.%Y %H:%M:%S")} \n')
+
+        result = main(film_name)
         markup = InlineKeyboardMarkup()
         menu_button = InlineKeyboardButton("📊 Back to Menu", callback_data='menu_button')
 
@@ -109,7 +124,7 @@ def usage(message):
 # Auto Response if text-message is not a Command
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def echo_all( message):
-    local_command_list = ["/help", "/checkmovie", "/usage","/send_logo", "/menu"]
+    local_command_list = ["/help", "/checkmovie","/send_logo", "/menu"]
     is_command = any(message.text.startswith(command) for command in local_command_list)
     if not is_command:
         menu(message)
